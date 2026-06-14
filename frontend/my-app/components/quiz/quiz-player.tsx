@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import type { Quiz } from "@/components/quiz/types";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl, urlFor } from "@/lib/sanity";
 
 type QuizPlayerProps = {
   quiz: Quiz;
@@ -16,7 +16,21 @@ function buildImageUrl(image: Quiz["coverImage"]) {
     return null;
   }
 
-  return urlFor(image).width(900).height(600).fit("crop").url();
+  return urlFor(image).fit("crop").url();
+}
+
+function buildImageLoader(
+  image: NonNullable<Quiz["coverImage"]>,
+  aspectRatio: number,
+  defaultQuality: number,
+) {
+  return ({ width, quality }: { width: number; quality?: number }) =>
+    buildOptimizedImageUrl(image, {
+      width,
+      height: Math.round(width / aspectRatio),
+      fit: "crop",
+      quality: quality ?? defaultQuality,
+    });
 }
 
 export function QuizPlayer({ quiz }: QuizPlayerProps) {
@@ -147,17 +161,30 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
 
                 {question.image?.asset?._ref ? (
                   <div className="relative aspect-[16/8] overflow-hidden rounded-xl bg-slate-100">
-                    <Image
-                      src={buildImageUrl(question.image) ?? ""}
-                      alt={
-                        question.image.alt ??
-                        question.questionText ??
-                        `Pitanje ${currentQuestionIndex + 1}`
-                      }
-                      fill
-                      sizes="(max-width: 640px) 92vw, (max-width: 1200px) 80vw, 900px"
-                      className="object-cover"
-                    />
+                    {(() => {
+                      const questionImageUrl = buildImageUrl(question.image);
+                      const questionImageLoader = buildImageLoader(
+                        question.image,
+                        2,
+                        68,
+                      );
+
+                      return (
+                        <Image
+                          loader={questionImageLoader}
+                          src={questionImageUrl ?? ""}
+                          alt={
+                            question.image.alt ??
+                            question.questionText ??
+                            `Pitanje ${currentQuestionIndex + 1}`
+                          }
+                          fill
+                          quality={68}
+                          sizes="(max-width: 640px) 92vw, (max-width: 1200px) 80vw, 900px"
+                          className="object-cover"
+                        />
+                      );
+                    })()}
                   </div>
                 ) : null}
 
@@ -199,17 +226,32 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
 
                               {answer.image?.asset?._ref ? (
                                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-slate-100">
-                                  <Image
-                                    src={buildImageUrl(answer.image) ?? ""}
-                                    alt={
-                                      answer.image.alt ??
-                                      answer.answerText ??
-                                      `Odgovor ${answerIndex + 1}`
-                                    }
-                                    fill
-                                    sizes="(max-width: 640px) 92vw, 500px"
-                                    className="object-cover"
-                                  />
+                                  {(() => {
+                                    const answerImageUrl = buildImageUrl(
+                                      answer.image,
+                                    );
+                                    const answerImageLoader = buildImageLoader(
+                                      answer.image,
+                                      4 / 3,
+                                      68,
+                                    );
+
+                                    return (
+                                      <Image
+                                        loader={answerImageLoader}
+                                        src={answerImageUrl ?? ""}
+                                        alt={
+                                          answer.image.alt ??
+                                          answer.answerText ??
+                                          `Odgovor ${answerIndex + 1}`
+                                        }
+                                        fill
+                                        quality={68}
+                                        sizes="(max-width: 640px) 92vw, 500px"
+                                        className="object-cover"
+                                      />
+                                    );
+                                  })()}
                                 </div>
                               ) : null}
                             </div>

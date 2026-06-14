@@ -17,13 +17,13 @@ export function PostHeader({
     ) ?? [];
 
   return (
-    <header className="space-y-6">
+    <header className="space-y-7">
       {normalizedCategories.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {normalizedCategories.map((categoryTitle) => (
             <span
               key={categoryTitle}
-              className="inline-flex rounded-full bg-amber-100 px-3 py-1 text-sm font-medium text-amber-900"
+              className="soft-chip inline-flex px-4 py-1.5 text-sm font-semibold"
             >
               {categoryTitle}
             </span>
@@ -31,18 +31,18 @@ export function PostHeader({
         </div>
       ) : null}
 
-      <h1 className="text-balance text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+      <h1 className="text-balance text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
         {title}
       </h1>
 
-      <p className="max-w-3xl text-xl leading-8 text-slate-600">{summary}</p>
+      <p className="max-w-3xl text-xl leading-9 text-slate-700">{summary}</p>
 
       {tags && tags.length > 0 ? (
         <div className="flex flex-wrap gap-2">
           {tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-sm text-slate-700"
+              className="rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-sm text-slate-700"
             >
               #{tag}
             </span>

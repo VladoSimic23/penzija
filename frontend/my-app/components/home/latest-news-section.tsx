@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import type { Post } from "@/components/post/types";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl, urlFor } from "@/lib/sanity";
 
 type LatestNewsSectionProps = {
   initialPosts: Post[];
@@ -28,17 +28,30 @@ function NewsImage({ post }: { post: Post }) {
     );
   }
 
-  const imageUrl = urlFor(post.mainImage)
-    .width(900)
-    .height(640)
-    .fit("crop")
-    .url();
+  const mainImage = post.mainImage;
+  const imageUrl = urlFor(mainImage).fit("crop").url();
+
+  const newsImageLoader = ({
+    width,
+    quality,
+  }: {
+    width: number;
+    quality?: number;
+  }) =>
+    buildOptimizedImageUrl(mainImage, {
+      width,
+      height: Math.round((width * 9) / 16),
+      fit: "crop",
+      quality: quality ?? 68,
+    });
 
   return (
     <Image
+      loader={newsImageLoader}
       src={imageUrl}
       alt={post.mainImage.alt ?? post.title}
       fill
+      quality={68}
       sizes="(max-width: 640px) 92vw, (max-width: 1280px) 20vw, 240px"
       className="object-cover"
     />
@@ -55,16 +68,16 @@ function NewsCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/${slug}`}
-      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_-28px_rgba(15,23,42,0.65)] transition hover:-translate-y-0.5 hover:border-slate-300"
+      className="group overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-[0_22px_60px_-30px_rgba(15,23,42,0.55)] transition hover:-translate-y-0.5 hover:border-sky-200"
     >
-      <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
+      <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
         <NewsImage post={post} />
       </div>
-      <div className="space-y-2 px-3 py-3">
-        <h3 className="line-clamp-2 text-sm font-semibold leading-5 text-slate-900">
+      <div className="space-y-1.5 px-4 py-3.5">
+        <h3 className="line-clamp-2 text-2xl font-bold leading-8 text-slate-900">
           {post.title}
         </h3>
-        <p className="line-clamp-2 text-xs leading-5 text-slate-600">
+        <p className="line-clamp-1 text-base leading-7 text-slate-700">
           {post.summary}
         </p>
       </div>
@@ -123,16 +136,16 @@ export function LatestNewsSection({
 
   if (posts.length === 0) {
     return emptyMessage ? (
-      <section className="space-y-4 sm:space-y-5">
+      <section className="content-panel space-y-4 p-5 sm:space-y-5 sm:p-7">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
             {headingLabel}
           </p>
-          <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             {headingTitle}
           </h2>
         </div>
-        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-5 text-sm text-slate-600">
+        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-5 text-base text-slate-700">
           {emptyMessage}
         </p>
       </section>
@@ -140,17 +153,17 @@ export function LatestNewsSection({
   }
 
   return (
-    <section className="space-y-5 sm:space-y-7">
+    <section className="content-panel space-y-5 p-5 sm:space-y-7 sm:p-7">
       <div>
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-700">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
           {headingLabel}
         </p>
-        <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           {headingTitle}
         </h2>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-5">
         {posts.map((post) => (
           <NewsCard key={post._id} post={post} />
         ))}
@@ -162,12 +175,12 @@ export function LatestNewsSection({
             type="button"
             onClick={handleLoadMore}
             disabled={loadState === "loading"}
-            className="rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full bg-sky-800 px-7 py-3 text-base font-bold text-white hover:bg-sky-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loadState === "loading" ? "Ucitavanje..." : "Ucitaj jos 5 vijesti"}
           </button>
         ) : (
-          <p className="text-sm text-slate-500">
+          <p className="text-base text-slate-500">
             Nema vise vijesti za ucitavanje.
           </p>
         )}

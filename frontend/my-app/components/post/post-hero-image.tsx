@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { SanityImage } from "@/components/post/types";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl } from "@/lib/sanity";
 
 type PostHeroImageProps = {
   image?: SanityImage;
@@ -12,7 +12,12 @@ export function PostHeroImage({ image, title }: PostHeroImageProps) {
     return null;
   }
 
-  const imageUrl = urlFor(image).width(1600).height(900).fit("crop").url();
+  const imageUrl = buildOptimizedImageUrl(image, {
+    width: 1600,
+    height: 900,
+    fit: "crop",
+    quality: 72,
+  });
 
   return (
     <figure className="overflow-hidden rounded-2xl">
@@ -21,6 +26,8 @@ export function PostHeroImage({ image, title }: PostHeroImageProps) {
         alt={image.alt ?? title}
         width={1600}
         height={900}
+        sizes="(max-width: 768px) 92vw, (max-width: 1280px) 85vw, 1200px"
+        quality={72}
         priority
         loading="eager"
         fetchPriority="high"

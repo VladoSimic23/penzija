@@ -89,3 +89,40 @@ export async function getLatestPostsPage(
     hasMore: rows.length > safeLimit,
   };
 }
+
+export async function searchPosts(
+  queryText: string,
+  limit = 30,
+): Promise<Post[]> {
+  const normalizedQuery = queryText.trim().toLowerCase();
+
+  if (!normalizedQuery) {
+    return [];
+  }
+
+  const safeLimit = Math.min(
+    50,
+    Math.max(1, Number.isFinite(limit) ? Math.floor(limit) : 30),
+  );
+
+  const query = `*[
+    _type == "post" &&
+    defined(slug.current) &&
+    (
+      lower(title) match $pattern ||
+      lower(summary) match $pattern
+    )
+  ] | order(_createdAt desc)[0...$limit]{
+    _id,
+    slug,
+    title,
+    summary,
+    mainImage,
+    categories[]->{title}
+  }`;
+
+  return sanityClient.fetch<Post[]>(query, {
+    pattern: `*${normalizedQuery}*`,
+    limit: safeLimit,
+  });
+}

@@ -1,8 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { FeaturedNewsMobileSlider } from "./featured-news-mobile-slider";
 import type { Post } from "@/components/post/types";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl, urlFor } from "@/lib/sanity";
 
 type FeaturedNewsProps = {
   posts: Post[];
@@ -23,18 +25,30 @@ function FeaturedImage({
     );
   }
 
-  const imageUrl = urlFor(post.mainImage)
-    .width(1400)
-    .height(900)
-    .fit("crop")
-    .url();
+  const mainImage = post.mainImage;
+  const imageUrl = urlFor(mainImage).fit("crop").url();
+
+  const featuredImageLoader = ({
+    width,
+    quality,
+  }: {
+    width: number;
+    quality?: number;
+  }) =>
+    buildOptimizedImageUrl(mainImage, {
+      width,
+      fit: "max",
+      quality: quality ?? 70,
+    });
 
   return (
     <Image
+      loader={featuredImageLoader}
       src={imageUrl}
       alt={post.mainImage.alt ?? post.title}
       fill
       priority={priority}
+      quality={70}
       sizes="(max-width: 768px) 86vw, (max-width: 1280px) 33vw, 420px"
       className="object-cover transition duration-500 group-hover:scale-[1.03]"
     />
@@ -51,16 +65,16 @@ function DesktopSecondaryCard({ post }: { post: Post }) {
   return (
     <Link
       href={`/${slug}`}
-      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_-26px_rgba(15,23,42,0.65)]"
+      className="group overflow-hidden rounded-3xl border border-sky-100 bg-white/95 shadow-[0_22px_50px_-30px_rgba(15,23,42,0.45)]"
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
         <FeaturedImage post={post} />
       </div>
-      <div className="space-y-2 px-4 py-4">
-        <h3 className="line-clamp-2 text-base font-semibold leading-6 text-slate-900">
+      <div className="space-y-2 px-5 py-5">
+        <h3 className="line-clamp-2 text-lg font-bold leading-7 text-slate-900">
           {post.title}
         </h3>
-        <p className="line-clamp-2 text-sm leading-6 text-slate-600">
+        <p className="line-clamp-2 text-base leading-7 text-slate-700">
           {post.summary}
         </p>
       </div>
@@ -78,10 +92,10 @@ export function FeaturedNews({ posts }: FeaturedNewsProps) {
   const mainSlug = mainPost.slug?.current;
 
   return (
-    <section className="space-y-4 sm:space-y-8">
+    <section className="content-panel space-y-5 p-5 sm:space-y-8 sm:p-8">
       <div className="flex items-end justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-rose-700">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
             Izdvojeno
           </p>
         </div>
@@ -93,16 +107,16 @@ export function FeaturedNews({ posts }: FeaturedNewsProps) {
         {mainSlug ? (
           <Link
             href={`/${mainSlug}`}
-            className="group block overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_30px_80px_-38px_rgba(15,23,42,0.75)]"
+            className="group block overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-[0_32px_80px_-42px_rgba(15,23,42,0.55)]"
           >
             <div className="relative aspect-[21/9] overflow-hidden bg-slate-100">
               <FeaturedImage post={mainPost} priority />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-900/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/78 via-slate-900/28 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
-                <h3 className="max-w-4xl text-2xl font-bold leading-tight text-white lg:text-3xl">
+                <h3 className="max-w-4xl text-2xl font-bold leading-tight text-white lg:text-[2.15rem]">
                   {mainPost.title}
                 </h3>
-                <p className="mt-3 max-w-3xl text-base leading-7 text-slate-100/95">
+                <p className="mt-3 max-w-3xl text-lg leading-8 text-slate-100/95">
                   {mainPost.summary}
                 </p>
               </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/components/post/types";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl, urlFor } from "@/lib/sanity";
 
 type FeaturedNewsMobileSliderProps = {
   posts: Post[];
@@ -21,17 +21,30 @@ function MobileSlideImage({ post }: { post: Post }) {
     );
   }
 
-  const imageUrl = urlFor(post.mainImage)
-    .width(1200)
-    .height(760)
-    .fit("crop")
-    .url();
+  const mainImage = post.mainImage;
+  const imageUrl = urlFor(mainImage).fit("crop").url();
+
+  const slideImageLoader = ({
+    width,
+    quality,
+  }: {
+    width: number;
+    quality?: number;
+  }) =>
+    buildOptimizedImageUrl(mainImage, {
+      width,
+      height: Math.round((width * 10) / 16),
+      fit: "crop",
+      quality: quality ?? 65,
+    });
 
   return (
     <Image
+      loader={slideImageLoader}
       src={imageUrl}
       alt={post.mainImage.alt ?? post.title}
       fill
+      quality={65}
       sizes="92vw"
       className="object-cover"
     />
@@ -67,19 +80,9 @@ export function FeaturedNewsMobileSlider({
     return null;
   }
 
-  const goToPrevious = () => {
-    setActiveIndex((previous) =>
-      previous === 0 ? slides.length - 1 : previous - 1,
-    );
-  };
-
-  const goToNext = () => {
-    setActiveIndex((previous) => (previous + 1) % slides.length);
-  };
-
   return (
     <div className="sm:hidden">
-      <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_40px_-22px_rgba(15,23,42,0.55)]">
+      <div className="relative overflow-hidden rounded-3xl border border-sky-100 bg-white shadow-[0_24px_55px_-30px_rgba(15,23,42,0.45)]">
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${normalizedActiveIndex * 100}%)` }}
@@ -90,14 +93,14 @@ export function FeaturedNewsMobileSlider({
               href={`/${post.slug!.current}`}
               className="group block w-full shrink-0"
             >
-              <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+              <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
                 <MobileSlideImage post={post} />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/20 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-4">
-                  <h3 className="line-clamp-2 text-base font-semibold leading-5 text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/82 via-slate-900/26 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5">
+                  <h3 className="line-clamp-2 text-xl font-bold leading-7 text-white">
                     {post.title}
                   </h3>
-                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-100/95">
+                  <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-100/95">
                     {post.summary}
                   </p>
                 </div>
@@ -105,31 +108,10 @@ export function FeaturedNewsMobileSlider({
             </Link>
           ))}
         </div>
-
-        {slides.length > 1 ? (
-          <>
-            <button
-              type="button"
-              onClick={goToPrevious}
-              aria-label="Prethodna vijest"
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-black/60"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              onClick={goToNext}
-              aria-label="Sljedeca vijest"
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-black/45 px-2.5 py-1.5 text-xs font-semibold text-white backdrop-blur transition hover:bg-black/60"
-            >
-              →
-            </button>
-          </>
-        ) : null}
       </div>
 
       {slides.length > 1 ? (
-        <div className="mt-3 flex items-center justify-center gap-2">
+        <div className="mt-4 flex items-center justify-center gap-2">
           {slides.map((post, index) => (
             <button
               key={post._id}
@@ -138,8 +120,8 @@ export function FeaturedNewsMobileSlider({
               aria-label={`Idi na slide ${index + 1}`}
               className={`h-2.5 rounded-full transition-all ${
                 normalizedActiveIndex === index
-                  ? "w-6 bg-slate-900"
-                  : "w-2.5 bg-slate-300"
+                  ? "w-8 bg-sky-700"
+                  : "w-2.5 bg-slate-300 hover:bg-slate-400"
               }`}
             />
           ))}

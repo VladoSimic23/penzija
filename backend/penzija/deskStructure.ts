@@ -5,6 +5,7 @@ export const deskStructure: StructureResolver = (S) =>
     .title('Content')
     .items([
       S.listItem().title('Posts').child(S.documentTypeList('post').title('Posts')),
+      S.listItem().title('Zakoni').child(S.documentTypeList('zakon').title('Zakoni')),
       S.listItem().title('Kvizovi').child(S.documentTypeList('quiz').title('Kvizovi')),
       S.listItem().title('Categories').child(S.documentTypeList('category').title('Categories')),
       S.listItem()

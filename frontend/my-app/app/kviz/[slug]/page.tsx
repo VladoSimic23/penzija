@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { QuizPlayer } from "@/components/quiz/quiz-player";
 import { getAllQuizSlugs, getQuizBySlug } from "@/lib/quizzes";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl } from "@/lib/sanity";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -27,7 +27,12 @@ export default async function QuizSlugPage({ params }: QuizSlugPageProps) {
   }
 
   const coverUrl = quiz.coverImage
-    ? urlFor(quiz.coverImage).width(1400).height(760).fit("crop").url()
+    ? buildOptimizedImageUrl(quiz.coverImage, {
+        width: 1200,
+        height: 650,
+        fit: "crop",
+        quality: 70,
+      })
     : null;
 
   return (
@@ -39,6 +44,7 @@ export default async function QuizSlugPage({ params }: QuizSlugPageProps) {
               src={coverUrl}
               alt={quiz.coverImage?.alt ?? quiz.title}
               fill
+              quality={70}
               sizes="(max-width: 768px) 92vw, 1200px"
               className="object-cover"
             />

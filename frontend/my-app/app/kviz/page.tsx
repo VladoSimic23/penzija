@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getAllQuizzes } from "@/lib/quizzes";
-import { urlFor } from "@/lib/sanity";
+import { buildOptimizedImageUrl } from "@/lib/sanity";
 
 export const revalidate = 60;
 
@@ -33,7 +33,12 @@ export default async function QuizListPage() {
           {quizzes.map((quiz) => {
             const slug = quiz.slug?.current;
             const coverUrl = quiz.coverImage
-              ? urlFor(quiz.coverImage).width(900).height(560).fit("crop").url()
+              ? buildOptimizedImageUrl(quiz.coverImage, {
+                  width: 900,
+                  height: 560,
+                  fit: "crop",
+                  quality: 68,
+                })
               : null;
 
             if (!slug) {
@@ -52,6 +57,7 @@ export default async function QuizListPage() {
                       src={coverUrl}
                       alt={quiz.coverImage?.alt ?? quiz.title}
                       fill
+                      quality={68}
                       sizes="(max-width: 768px) 92vw, (max-width: 1280px) 46vw, 30vw"
                       className="object-cover transition duration-300 group-hover:scale-[1.03]"
                     />

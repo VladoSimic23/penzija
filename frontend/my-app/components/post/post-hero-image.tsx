@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { SanityImage } from "@/components/post/types";
-import { buildOptimizedImageUrl } from "@/lib/sanity";
+import { buildOptimizedImageUrl, IMAGE_BLUR_PLACEHOLDER } from "@/lib/sanity";
 
 type PostHeroImageProps = {
   image?: SanityImage;
@@ -24,6 +24,8 @@ export function PostHeroImage({ image, title }: PostHeroImageProps) {
       <Image
         src={imageUrl}
         alt={image.alt ?? title}
+        placeholder="blur"
+        blurDataURL={IMAGE_BLUR_PLACEHOLDER}
         width={1600}
         height={900}
         sizes="(max-width: 768px) 92vw, (max-width: 1280px) 85vw, 1200px"

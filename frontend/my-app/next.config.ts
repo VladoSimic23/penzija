@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
         hostname: "cdn.sanity.io",
       },
     ],
-    formats: ["image/avif", "image/webp"],
+    formats: ["image/webp"],
     qualities: [65, 68, 70, 72, 75],
     deviceSizes: [360, 414, 640, 750, 828, 1080, 1200],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

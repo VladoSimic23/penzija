@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { QuizPlayer } from "@/components/quiz/quiz-player";
 import { getAllQuizSlugs, getQuizBySlug } from "@/lib/quizzes";
-import { buildOptimizedImageUrl } from "@/lib/sanity";
+import { buildOptimizedImageUrl, IMAGE_BLUR_PLACEHOLDER } from "@/lib/sanity";
 
 export const revalidate = 60;
 export const dynamicParams = true;
@@ -43,6 +43,8 @@ export default async function QuizSlugPage({ params }: QuizSlugPageProps) {
             <Image
               src={coverUrl}
               alt={quiz.coverImage?.alt ?? quiz.title}
+              placeholder="blur"
+              blurDataURL={IMAGE_BLUR_PLACEHOLDER}
               fill
               quality={70}
               sizes="(max-width: 768px) 92vw, 1200px"

@@ -50,6 +50,18 @@ export default async function SlugPage({ params }: SlugPageProps) {
         <PostHeroImage image={post.mainImage} title={post.title} />
         <PostContent content={post.content} />
         <PostGallery gallery={post.gallery} />
+        {post.tags && post.tags.length > 0 ? (
+          <div className="flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-slate-200 bg-slate-50 px-4 py-1.5 text-base text-slate-700"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
         {post.poll?.question && post.poll.options?.length >= 2 ? (
           <PostPollSection
             postId={post._id}

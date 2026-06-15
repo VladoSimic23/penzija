@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getAllQuizzes } from "@/lib/quizzes";
-import { buildOptimizedImageUrl } from "@/lib/sanity";
+import { buildOptimizedImageUrl, IMAGE_BLUR_PLACEHOLDER } from "@/lib/sanity";
 
 export const revalidate = 60;
 
@@ -56,6 +56,8 @@ export default async function QuizListPage() {
                     <Image
                       src={coverUrl}
                       alt={quiz.coverImage?.alt ?? quiz.title}
+                      placeholder="blur"
+                      blurDataURL={IMAGE_BLUR_PLACEHOLDER}
                       fill
                       quality={68}
                       sizes="(max-width: 768px) 92vw, (max-width: 1280px) 46vw, 30vw"

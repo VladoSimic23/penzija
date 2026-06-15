@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { SanityImage } from "@/components/post/types";
-import { buildOptimizedImageUrl } from "@/lib/sanity";
+import { buildOptimizedImageUrl, IMAGE_BLUR_PLACEHOLDER } from "@/lib/sanity";
 
 type PostGalleryProps = {
   gallery?: SanityImage[];
@@ -37,6 +37,8 @@ export function PostGallery({ gallery }: PostGalleryProps) {
               <Image
                 src={imageUrl}
                 alt={image.alt ?? `Gallery image ${index + 1}`}
+                placeholder="blur"
+                blurDataURL={IMAGE_BLUR_PLACEHOLDER}
                 width={900}
                 height={700}
                 sizes="(max-width: 640px) 92vw, (max-width: 1024px) 46vw, 440px"

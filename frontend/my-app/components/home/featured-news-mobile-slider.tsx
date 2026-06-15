@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Post } from "@/components/post/types";
 import { buildOptimizedImageUrl, urlFor } from "@/lib/sanity";
 
@@ -10,7 +10,7 @@ type FeaturedNewsMobileSliderProps = {
   posts: Post[];
 };
 
-const AUTO_PLAY_MS = 4500;
+const AUTO_PLAY_MS = 6500;
 
 function MobileSlideImage({ post }: { post: Post }) {
   if (!post.mainImage?.asset?._ref) {
@@ -62,6 +62,26 @@ export function FeaturedNewsMobileSlider({
   const normalizedActiveIndex =
     slides.length > 0 ? activeIndex % slides.length : 0;
 
+  // swipe support
+  const touchStartX = useRef<number | null>(null);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null) return;
+    const delta = touchStartX.current - e.changedTouches[0].clientX;
+    if (Math.abs(delta) > 40) {
+      setActiveIndex((prev) =>
+        delta > 0
+          ? (prev + 1) % slides.length
+          : (prev - 1 + slides.length) % slides.length,
+      );
+    }
+    touchStartX.current = null;
+  }
+
   useEffect(() => {
     if (slides.length <= 1) {
       return;
@@ -86,6 +106,8 @@ export function FeaturedNewsMobileSlider({
         <div
           className="flex transition-transform duration-500 ease-out"
           style={{ transform: `translateX(-${normalizedActiveIndex * 100}%)` }}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
           {slides.map((post) => (
             <Link
@@ -93,7 +115,7 @@ export function FeaturedNewsMobileSlider({
               href={`/${post.slug!.current}`}
               className="group block w-full shrink-0"
             >
-              <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
+              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                 <MobileSlideImage post={post} />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/82 via-slate-900/26 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">

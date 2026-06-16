@@ -7,6 +7,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     slug,
     title,
     summary,
+    subtitle,
     mainImage,
     tags,
     content,
@@ -40,6 +41,7 @@ export async function getLatestFeaturedPosts(limit = 4): Promise<Post[]> {
     slug,
     title,
     summary,
+    subtitle,
     mainImage,
     categories[]->{title}
   }`;
@@ -74,6 +76,7 @@ export async function getLatestPostsPage(
     slug,
     title,
     summary,
+    subtitle,
     mainImage,
     categories[]->{title}
   }`;
@@ -117,6 +120,7 @@ export async function searchPosts(
     slug,
     title,
     summary,
+    subtitle,
     mainImage,
     categories[]->{title}
   }`;

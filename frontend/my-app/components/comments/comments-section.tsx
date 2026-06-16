@@ -111,11 +111,11 @@ export function CommentsSection({
     <section className="mt-12 space-y-8 border-t border-black/10 pt-8">
       <div className="space-y-2">
         <h2 className="text-2xl font-semibold">Komentari</h2>
-        <p className="text-sm text-black/60">{commentsCountLabel}</p>
+        <p className="text-lg text-black/60">{commentsCountLabel}</p>
       </div>
       <div className="space-y-4">
         {comments.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-black/20 bg-black/5 px-4 py-5 text-sm text-black/70">
+          <p className="rounded-xl border border-dashed border-black/20 bg-black/5 px-4 py-5 text-lg text-black/70">
             Jos nema komentara. Budi prvi koji ce ostaviti komentar.
           </p>
         ) : (
@@ -125,15 +125,15 @@ export function CommentsSection({
               className="rounded-xl border border-black/10 bg-white px-4 py-4 shadow-sm"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-medium">{comment.name}</h3>
+                <h3 className="text-lg font-semibold">{comment.name}</h3>
                 <time
-                  className="text-xs text-black/50"
+                  className="text-sm text-black/50"
                   dateTime={comment._createdAt}
                 >
                   {formatDate(comment._createdAt)}
                 </time>
               </div>
-              <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-black/80">
+              <p className="mt-2 whitespace-pre-wrap text-lg leading-8 text-black/80">
                 {comment.message}
               </p>
             </article>
@@ -144,10 +144,10 @@ export function CommentsSection({
         onSubmit={handleSubmit}
         className="space-y-4 rounded-2xl border border-black/10 bg-black/[0.03] p-5"
       >
-        <h3 className="text-lg font-semibold">Ostavi komentar</h3>
+        <h3 className="text-xl font-semibold">Ostavi komentar</h3>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium">Ime</span>
+          <span className="text-lg font-medium">Ime</span>
           <input
             type="text"
             name="name"
@@ -156,13 +156,13 @@ export function CommentsSection({
             minLength={NAME_MIN}
             maxLength={NAME_MAX}
             required
-            className="w-full rounded-lg border border-black/20 bg-white px-3 py-2 text-sm outline-none transition focus:border-black/40"
+            className="w-full rounded-lg border border-black/20 bg-white px-3 py-2.5 text-lg outline-none transition focus:border-black/40"
             placeholder="Unesi ime"
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-medium">Komentar</span>
+          <span className="text-lg font-medium">Komentar</span>
           <textarea
             name="message"
             value={message}
@@ -171,7 +171,7 @@ export function CommentsSection({
             maxLength={MESSAGE_MAX}
             required
             rows={5}
-            className="w-full resize-y rounded-lg border border-black/20 bg-white px-3 py-2 text-sm outline-none transition focus:border-black/40"
+            className="w-full resize-y rounded-lg border border-black/20 bg-white px-3 py-2.5 text-lg outline-none transition focus:border-black/40"
             placeholder="Napisi svoj komentar"
           />
         </label>
@@ -192,7 +192,7 @@ export function CommentsSection({
           <button
             type="submit"
             disabled={submitState === "loading"}
-            className="rounded-lg bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg bg-black px-5 py-2.5 text-lg font-medium text-white transition hover:bg-black/85 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {submitState === "loading" ? "Slanje..." : "Ostavi komentar"}
           </button>

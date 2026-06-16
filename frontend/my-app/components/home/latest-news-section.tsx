@@ -72,12 +72,17 @@ function NewsCard({ post }: { post: Post }) {
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
         <NewsImage post={post} />
+        {post.subtitle ? (
+          <span className="absolute left-3 top-3 rounded-full bg-white/92 px-3 py-1 text-sm font-bold leading-5 text-sky-800 shadow-sm">
+            {post.subtitle}
+          </span>
+        ) : null}
       </div>
       <div className="space-y-1.5 px-4 py-3.5">
-        <h3 className="line-clamp-2 text-2xl font-bold leading-8 text-slate-900">
+        <h3 className="text-2xl font-bold leading-8 text-slate-900">
           {post.title}
         </h3>
-        <p className="line-clamp-1 text-base leading-7 text-slate-700">
+        <p className="line-clamp-2 text-base leading-7 text-slate-700">
           {post.summary}
         </p>
       </div>

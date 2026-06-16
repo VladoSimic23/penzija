@@ -43,7 +43,6 @@ export default async function SlugPage({ params }: SlugPageProps) {
       <article className="content-panel space-y-10 p-6 sm:p-8 lg:p-10">
         <PostHeader
           title={post.title}
-          summary={post.summary}
           tags={post.tags}
           categoryTitles={categoryTitles}
         />

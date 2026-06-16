@@ -118,8 +118,13 @@ export function FeaturedNewsMobileSlider({
               <div className="relative aspect-[4/3] overflow-hidden bg-slate-100">
                 <MobileSlideImage post={post} />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/82 via-slate-900/26 to-transparent" />
+                {post.subtitle ? (
+                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold leading-5 text-sky-900 shadow-sm">
+                    {post.subtitle}
+                  </span>
+                ) : null}
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <h3 className="line-clamp-2 text-xl font-bold leading-7 text-white">
+                  <h3 className="text-xl font-bold leading-7 text-white">
                     {post.title}
                   </h3>
                   <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-100/95">

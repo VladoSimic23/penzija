@@ -90,9 +90,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 >
                   <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
                     <SearchResultImage post={post} />
+                    {post.subtitle ? (
+                      <span className="absolute left-3 top-3 rounded-full bg-white/92 px-3 py-1 text-xs font-semibold leading-5 text-sky-800 shadow-sm">
+                        {post.subtitle}
+                      </span>
+                    ) : null}
                   </div>
                   <div className="space-y-1.5 px-4 py-3.5">
-                    <h2 className="line-clamp-2 text-xl font-bold leading-7 text-slate-900">
+                    <h2 className="text-xl font-bold leading-7 text-slate-900">
                       {post.title}
                     </h2>
                     <p className="line-clamp-1 text-sm leading-6 text-slate-700">

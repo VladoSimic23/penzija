@@ -69,9 +69,14 @@ function DesktopSecondaryCard({ post }: { post: Post }) {
     >
       <div className="relative aspect-[16/9] overflow-hidden bg-slate-100">
         <FeaturedImage post={post} />
+        {post.subtitle ? (
+          <span className="absolute left-3 top-3 rounded-full bg-white/92 px-3 py-1 text-xs font-semibold leading-5 text-sky-800 shadow-sm">
+            {post.subtitle}
+          </span>
+        ) : null}
       </div>
       <div className="space-y-2 px-5 py-5">
-        <h3 className="line-clamp-2 text-lg font-bold leading-7 text-slate-900">
+        <h3 className="text-lg font-bold leading-7 text-slate-900">
           {post.title}
         </h3>
         <p className="line-clamp-2 text-base leading-7 text-slate-700">
@@ -112,6 +117,11 @@ export function FeaturedNews({ posts }: FeaturedNewsProps) {
             <div className="relative aspect-[21/9] overflow-hidden bg-slate-100">
               <FeaturedImage post={mainPost} priority />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950/78 via-slate-900/28 to-transparent" />
+              {mainPost.subtitle ? (
+                <span className="absolute left-6 top-6 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold leading-5 text-sky-900 shadow-sm lg:left-8 lg:top-8">
+                  {mainPost.subtitle}
+                </span>
+              ) : null}
               <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
                 <h3 className="max-w-4xl text-2xl font-bold leading-tight text-white lg:text-[2.15rem]">
                   {mainPost.title}

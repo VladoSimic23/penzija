@@ -29,6 +29,12 @@ export const postType = defineType({
       validation: (Rule) => Rule.required().min(10).max(400),
     }),
     defineField({
+      name: 'subtitle',
+      title: 'Nadnaslov',
+      type: 'string',
+      validation: (Rule) => Rule.max(120),
+    }),
+    defineField({
       name: 'mainImage',
       title: 'Main image',
       type: 'image',

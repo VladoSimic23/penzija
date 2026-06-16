@@ -45,6 +45,7 @@ export type Post = {
   };
   title: string;
   summary: string;
+  subtitle?: string;
   mainImage?: SanityImage;
   tags?: string[];
   content?: PortableTextBlock[];

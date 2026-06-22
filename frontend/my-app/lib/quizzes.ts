@@ -1,9 +1,9 @@
 import type { Quiz, QuizListItem } from "@/components/quiz/types";
-import { sanityClient, sanityLiveClient } from "@/lib/sanity";
+import { fetchSanity } from "@/lib/sanity";
 
 export async function getAllQuizSlugs(): Promise<string[]> {
   const query = `*[_type == "quiz" && defined(slug.current)].slug.current`;
-  return sanityClient.fetch<string[]>(query);
+  return fetchSanity<string[]>(query);
 }
 
 export async function getQuizBySlug(slug: string): Promise<Quiz | null> {
@@ -27,7 +27,7 @@ export async function getQuizBySlug(slug: string): Promise<Quiz | null> {
     }
   }`;
 
-  return sanityClient.fetch<Quiz | null>(query, { slug });
+  return fetchSanity<Quiz | null>(query, { slug });
 }
 
 export async function getAllQuizzes(): Promise<QuizListItem[]> {
@@ -40,5 +40,5 @@ export async function getAllQuizzes(): Promise<QuizListItem[]> {
     "questionsCount": count(questions)
   }`;
 
-  return sanityLiveClient.fetch<QuizListItem[]>(query);
+  return fetchSanity<QuizListItem[]>(query, undefined, { preferLive: true });
 }

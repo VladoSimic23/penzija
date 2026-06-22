@@ -39,8 +39,8 @@ export default async function SlugPage({ params }: SlugPageProps) {
     .filter((title) => title.length > 0);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-8 sm:py-10">
-      <article className="content-panel space-y-10 p-6 sm:p-8 lg:p-10">
+    <main className="mx-auto w-full max-w-6xl bg-white py-8 sm:px-8 sm:py-10">
+      <article className="content-panel space-y-10 rounded-none border-0 bg-white p-5 shadow-none sm:rounded-[1.25rem] sm:border sm:border-slate-300 sm:p-8 sm:shadow-[0_20px_60px_-42px_rgba(15,23,42,0.45)] lg:p-10">
         <PostHeader
           title={post.title}
           tags={post.tags}

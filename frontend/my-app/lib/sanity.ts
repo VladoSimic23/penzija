@@ -3,12 +3,13 @@ import { createClient } from "@sanity/client";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "lmt8oc1w";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
+const useCdnInReadClient = process.env.NODE_ENV === "production";
 
 export const sanityClient = createClient({
   projectId,
   dataset,
   apiVersion: "2026-05-29",
-  useCdn: true,
+  useCdn: useCdnInReadClient,
 });
 
 export const sanityLiveClient = createClient({
@@ -17,6 +18,103 @@ export const sanityLiveClient = createClient({
   apiVersion: "2026-05-29",
   useCdn: false,
 });
+
+type SanityQueryParams = Record<string, unknown>;
+
+type SanityFetchOptions = {
+  preferLive?: boolean;
+  retries?: number;
+};
+
+const DEFAULT_SANITY_RETRIES = 2;
+
+function isNetworkError(error: unknown) {
+  if (!error || typeof error !== "object") {
+    return false;
+  }
+
+  const candidate = error as {
+    isNetworkError?: boolean;
+    message?: string;
+    cause?: unknown;
+  };
+
+  if (candidate.isNetworkError) {
+    return true;
+  }
+
+  if (
+    candidate.cause &&
+    typeof candidate.cause === "object" &&
+    "code" in candidate.cause
+  ) {
+    const code = (candidate.cause as { code?: unknown }).code;
+
+    if (typeof code === "string" && code.startsWith("UND_ERR_")) {
+      return true;
+    }
+  }
+
+  const message = candidate.message ?? "";
+  return (
+    message.includes("fetch failed") ||
+    message.includes("Connect Timeout") ||
+    message.includes("network")
+  );
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+async function fetchWithRetry<T>(
+  client: typeof sanityClient,
+  query: string,
+  params?: SanityQueryParams,
+  retries = DEFAULT_SANITY_RETRIES,
+): Promise<T> {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      return await client.fetch<T>(query, params);
+    } catch (error) {
+      lastError = error;
+
+      const canRetry = isNetworkError(error) && attempt < retries;
+
+      if (!canRetry) {
+        throw error;
+      }
+
+      await sleep(250 * (attempt + 1));
+    }
+  }
+
+  throw lastError;
+}
+
+export async function fetchSanity<T>(
+  query: string,
+  params?: SanityQueryParams,
+  options: SanityFetchOptions = {},
+): Promise<T> {
+  const { preferLive = false, retries = DEFAULT_SANITY_RETRIES } = options;
+  const primaryClient = preferLive ? sanityLiveClient : sanityClient;
+  const fallbackClient = preferLive ? sanityClient : sanityLiveClient;
+
+  try {
+    return await fetchWithRetry<T>(primaryClient, query, params, retries);
+  } catch (error) {
+    if (!isNetworkError(error)) {
+      throw error;
+    }
+
+    return fetchWithRetry<T>(fallbackClient, query, params, retries);
+  }
+}
 
 const imageBuilder = createImageUrlBuilder(sanityClient);
 

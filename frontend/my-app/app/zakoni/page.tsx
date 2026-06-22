@@ -7,7 +7,7 @@ export default async function ZakoniPage() {
   const zakoni = await getAllZakoni();
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-8 sm:py-10">
+    <main className="mx-auto w-full max-w-6xl py-8 sm:px-8 sm:py-10">
       <section className="space-y-7">
         <header className="content-panel space-y-3 p-6 sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">

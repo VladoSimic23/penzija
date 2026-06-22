@@ -86,10 +86,10 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
   return (
     <section className="space-y-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-[0_25px_60px_-35px_rgba(15,23,42,0.75)] sm:p-8">
       <div className="flex flex-col gap-2 rounded-2xl bg-slate-50 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-5">
-        <p className="text-sm font-semibold text-slate-700">
+        <p className="text-base font-semibold text-slate-700 sm:text-lg">
           Odgovoreno: {answeredCount}/{questionCount}
         </p>
-        <p className="text-sm font-semibold text-sky-800">
+        <p className="text-base font-semibold text-sky-800 sm:text-lg">
           Točno: {score}/{questionCount} ({percentage}%)
         </p>
       </div>
@@ -97,13 +97,13 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
       <div className="space-y-6">
         {isFinished ? (
           <article className="space-y-3 rounded-2xl border border-emerald-200 bg-emerald-50/70 p-5 sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-700">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
               Kviz završen
             </p>
-            <h3 className="text-xl font-bold text-slate-900">
+            <h3 className="text-2xl font-bold text-slate-900 sm:text-3xl">
               Odlično odrađeno.
             </h3>
-            <p className="text-sm text-slate-700 sm:text-base">
+            <p className="text-base text-slate-700 sm:text-lg">
               Konačan rezultat je {score}/{questionCount} ({percentage}%).
             </p>
           </article>
@@ -134,17 +134,17 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
                 className="space-y-4 rounded-2xl border border-slate-200 p-4 sm:p-5"
               >
                 <header className="space-y-2">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">
+                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
                     Pitanje {currentQuestionIndex + 1}
                   </p>
                   {question.questionText ? (
-                    <h3 className="text-lg font-bold text-slate-900">
+                    <h3 className="text-xl font-bold text-slate-900 sm:text-2xl">
                       {question.questionText}
                     </h3>
                   ) : null}
                   {hasAnswered ? (
                     <p
-                      className={`text-xs font-semibold ${
+                      className={`text-sm font-semibold ${
                         isSelectedCorrect ? "text-emerald-700" : "text-rose-700"
                       }`}
                     >
@@ -153,7 +153,7 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
                         : "Netočan odgovor."}
                     </p>
                   ) : (
-                    <p className="text-xs text-slate-500">
+                    <p className="text-sm text-slate-500 sm:text-base">
                       Odaberite jedan odgovor.
                     </p>
                   )}
@@ -219,7 +219,7 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
                             </span>
                             <div className="min-w-0 flex-1 space-y-2">
                               {answer.answerText ? (
-                                <p className="text-sm font-medium text-slate-800">
+                                <p className="text-base font-medium text-slate-800 sm:text-lg">
                                   {answer.answerText}
                                 </p>
                               ) : null}
@@ -263,14 +263,14 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
                 </ul>
 
                 {hasAnswered && correctAnswer ? (
-                  <p className="rounded-xl bg-sky-50 px-3 py-2 text-sm font-medium text-sky-900 sm:px-4">
+                  <p className="rounded-xl bg-sky-50 px-3 py-2 text-base font-medium text-sky-900 sm:px-4 sm:text-lg">
                     Točan odgovor:{" "}
                     {correctAnswer.answerText || "Odgovor sa slikom"}
                   </p>
                 ) : null}
 
                 {hasAnswered && question.explanation ? (
-                  <p className="rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-700 sm:px-4">
+                  <p className="rounded-xl bg-slate-50 px-3 py-2 text-base text-slate-700 sm:px-4 sm:text-lg">
                     {question.explanation}
                   </p>
                 ) : null}
@@ -280,7 +280,7 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
                     <button
                       type="button"
                       onClick={goToNextQuestion}
-                      className="rounded-full bg-slate-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-slate-800"
+                      className="rounded-full bg-slate-900 px-5 py-2 text-base font-semibold text-white transition hover:bg-slate-800 sm:text-lg"
                     >
                       {currentQuestionIndex === questionCount - 1
                         ? "Završi kviz"
@@ -298,7 +298,7 @@ export function QuizPlayer({ quiz }: QuizPlayerProps) {
         <button
           type="button"
           onClick={resetQuiz}
-          className="rounded-full border border-slate-300 px-6 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-100"
+          className="rounded-full border border-slate-300 px-6 py-2.5 text-base font-semibold text-slate-700 transition hover:bg-slate-100 sm:text-lg"
         >
           Resetiraj kviz
         </button>

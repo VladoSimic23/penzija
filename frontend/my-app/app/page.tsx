@@ -9,7 +9,7 @@ export default async function Home() {
   const latestNews = await getLatestPostsPage(0, 5);
 
   return (
-    <main className="mx-auto w-full max-w-7xl space-y-8 px-4 py-8 sm:space-y-10 sm:px-8 sm:py-10">
+    <main className="mx-auto w-full max-w-7xl space-y-8 py-8 sm:space-y-10 sm:px-8 sm:py-10">
       {/* <section className="content-panel p-6 sm:p-8">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
           Dobro dosli

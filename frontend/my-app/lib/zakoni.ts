@@ -1,5 +1,5 @@
 import type { PortableTextBlock } from "@/components/post/types";
-import { sanityClient } from "@/lib/sanity";
+import { fetchSanity } from "@/lib/sanity";
 
 export type Zakon = {
   _id: string;
@@ -19,12 +19,12 @@ export async function getAllZakoni(): Promise<Zakon[]> {
     slug
   }`;
 
-  return sanityClient.fetch<Zakon[]>(query);
+  return fetchSanity<Zakon[]>(query);
 }
 
 export async function getAllZakonSlugs(): Promise<string[]> {
   const query = `*[_type == "zakon" && defined(slug.current)].slug.current`;
-  return sanityClient.fetch<string[]>(query);
+  return fetchSanity<string[]>(query);
 }
 
 export async function getZakonBySlug(slug: string): Promise<Zakon | null> {
@@ -36,5 +36,5 @@ export async function getZakonBySlug(slug: string): Promise<Zakon | null> {
     content
   }`;
 
-  return sanityClient.fetch<Zakon | null>(query, { slug });
+  return fetchSanity<Zakon | null>(query, { slug });
 }

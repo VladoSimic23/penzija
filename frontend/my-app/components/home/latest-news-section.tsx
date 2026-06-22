@@ -160,9 +160,9 @@ export function LatestNewsSection({
   return (
     <section className="content-panel space-y-5 p-5 sm:space-y-7 sm:p-7">
       <div>
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
+        {/* <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
           {headingLabel}
-        </p>
+        </p> */}
         <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           {headingTitle}
         </h2>

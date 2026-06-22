@@ -11,13 +11,13 @@ export default async function QuizListPage() {
   return (
     <main className="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 sm:space-y-10 sm:px-8 sm:py-12">
       <header className="space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
           Kviz
         </p>
-        <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
           Testirajte znanje kroz kvizove
         </h1>
-        <p className="max-w-3xl text-sm leading-6 text-slate-600 sm:text-base">
+        <p className="max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
           Odaberite kviz i odmah krenite. Svaki kviz moze imati neogranicen broj
           pitanja, tekstualne i slikovne odgovore te automatsku provjeru
           rezultata.
@@ -25,7 +25,7 @@ export default async function QuizListPage() {
       </header>
 
       {quizzes.length === 0 ? (
-        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-5 text-sm text-slate-600 sm:px-5">
+        <p className="rounded-2xl border border-slate-200 bg-white px-4 py-5 text-base text-slate-600 sm:px-5 sm:text-lg">
           Trenutno nema objavljenih kvizova.
         </p>
       ) : (
@@ -64,20 +64,20 @@ export default async function QuizListPage() {
                       className="object-cover transition duration-300 group-hover:scale-[1.03]"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center px-6 text-center text-sm font-semibold text-slate-600">
+                    <div className="flex h-full items-center justify-center px-6 text-center text-base font-semibold text-slate-600 sm:text-lg">
                       Kviz bez naslovne slike
                     </div>
                   )}
                 </div>
 
                 <div className="space-y-2 px-4 py-4 sm:px-5 sm:py-5">
-                  <h2 className="line-clamp-2 text-lg font-bold text-slate-900">
+                  <h2 className="line-clamp-2 text-xl font-bold text-slate-900 sm:text-2xl">
                     {quiz.title}
                   </h2>
-                  <p className="line-clamp-3 text-sm leading-6 text-slate-600">
+                  <p className="line-clamp-3 text-base leading-7 text-slate-600 sm:text-lg">
                     {quiz.description}
                   </p>
-                  <p className="pt-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-700">
+                  <p className="pt-1 text-sm font-semibold uppercase tracking-[0.16em] text-sky-700">
                     {quiz.questionsCount} pitanja
                   </p>
                 </div>

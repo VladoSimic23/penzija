@@ -1,4 +1,4 @@
-import { sanityClient, sanityLiveClient } from "@/lib/sanity";
+import { fetchSanity } from "@/lib/sanity";
 import type { Post } from "@/components/post/types";
 
 export async function getPostBySlug(slug: string): Promise<Post | null> {
@@ -23,12 +23,12 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     categories[]->{title}
   }`;
 
-  return sanityClient.fetch<Post | null>(query, { slug });
+  return fetchSanity<Post | null>(query, { slug });
 }
 
 export async function getAllPostSlugs(): Promise<string[]> {
   const query = `*[_type == "post" && defined(slug.current)].slug.current`;
-  return sanityClient.fetch<string[]>(query);
+  return fetchSanity<string[]>(query);
 }
 
 export async function getLatestFeaturedPosts(limit = 4): Promise<Post[]> {
@@ -46,7 +46,7 @@ export async function getLatestFeaturedPosts(limit = 4): Promise<Post[]> {
     categories[]->{title}
   }`;
 
-  return sanityClient.fetch<Post[]>(query, { limit });
+  return fetchSanity<Post[]>(query, { limit });
 }
 
 export type PaginatedPostsResult = {
@@ -81,11 +81,15 @@ export async function getLatestPostsPage(
     categories[]->{title}
   }`;
 
-  const rows = await sanityLiveClient.fetch<Post[]>(query, {
-    start: safeStart,
-    end,
-    categoryTitle: normalizedCategory,
-  });
+  const rows = await fetchSanity<Post[]>(
+    query,
+    {
+      start: safeStart,
+      end,
+      categoryTitle: normalizedCategory,
+    },
+    { preferLive: true },
+  );
 
   return {
     posts: rows.slice(0, safeLimit),
@@ -125,7 +129,7 @@ export async function searchPosts(
     categories[]->{title}
   }`;
 
-  return sanityClient.fetch<Post[]>(query, {
+  return fetchSanity<Post[]>(query, {
     pattern: `*${normalizedQuery}*`,
     limit: safeLimit,
   });

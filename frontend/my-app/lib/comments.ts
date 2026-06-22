@@ -1,5 +1,5 @@
 import type { PostComment } from "@/components/comments/types";
-import { sanityLiveClient } from "@/lib/sanity";
+import { fetchSanity } from "@/lib/sanity";
 
 export async function getCommentsByPostId(
   postId: string,
@@ -11,5 +11,5 @@ export async function getCommentsByPostId(
     _createdAt
   }`;
 
-  return sanityLiveClient.fetch<PostComment[]>(query, { postId });
+  return fetchSanity<PostComment[]>(query, { postId }, { preferLive: true });
 }

@@ -98,13 +98,13 @@ export function FeaturedNews({ posts }: FeaturedNewsProps) {
 
   return (
     <section className="content-panel space-y-5 p-5 sm:space-y-8 sm:p-8">
-      <div className="flex items-end justify-between gap-3">
+      {/* <div className="flex items-end justify-between gap-3">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-sky-700">
             Izdvojeno
           </p>
         </div>
-      </div>
+      </div> */}
 
       <FeaturedNewsMobileSlider posts={posts.slice(0, 4)} />
 

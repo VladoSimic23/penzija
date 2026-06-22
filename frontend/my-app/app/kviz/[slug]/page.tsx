@@ -54,16 +54,16 @@ export default async function QuizSlugPage({ params }: QuizSlugPageProps) {
         ) : null}
 
         <div className="space-y-3 px-5 py-5 sm:px-7 sm:py-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-700">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
             Kviz
           </p>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
             {quiz.title}
           </h1>
-          <p className="text-sm leading-6 text-slate-600 sm:text-base">
+          <p className="text-base leading-8 text-slate-600 sm:text-lg">
             {quiz.description}
           </p>
-          <p className="pt-1 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">
+          <p className="pt-1 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
             Ukupno pitanja: {quiz.questions.length}
           </p>
         </div>

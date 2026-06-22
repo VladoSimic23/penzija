@@ -1,5 +1,6 @@
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { createClient } from "@sanity/client";
+import type { QueryParams } from "@sanity/client";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ?? "lmt8oc1w";
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET ?? "production";
@@ -19,7 +20,7 @@ export const sanityLiveClient = createClient({
   useCdn: false,
 });
 
-type SanityQueryParams = Record<string, unknown>;
+type SanityQueryParams = QueryParams;
 
 type SanityFetchOptions = {
   preferLive?: boolean;
@@ -79,7 +80,11 @@ async function fetchWithRetry<T>(
 
   for (let attempt = 0; attempt <= retries; attempt += 1) {
     try {
-      return await client.fetch<T>(query, params);
+      if (params) {
+        return await client.fetch<T>(query, params);
+      }
+
+      return await client.fetch<T>(query);
     } catch (error) {
       lastError = error;
 
